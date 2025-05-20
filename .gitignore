@@ -1,0 +1,11 @@
+# .gitignore
+*.tfstate
+*.tfstate.*
+.terraform/
+*.pem
+*.env
+terraform.tfvars
+dev.tfvars
+*.log
+.DS_Store
+node_modules/
