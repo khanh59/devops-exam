@@ -1,4 +1,8 @@
-# Section Infrastructure as code # terraform (DONE)
+# DevOps Exam: Coffeeshop Microservices Platform
+
+This repository contains infrastructure-as-code, Docker, and Kubernetes resources for deploying the Coffeeshop microservices application. It implements best practices in cloud infrastructure provisioning, container orchestration, CI/CD, and monitoring.
+
+# Terraform Infrastructure
     - Create AWS account: Accesskey and SecretKey with AdminAcess
     - Workdir: infrastrucure, install aws, terraform
     - Create s3 unique bucket, add bucket to root backend.tf
@@ -14,7 +18,7 @@
     $ terraform plan -var-file=dev.tfvars
     $ terraform apply -var-file=dev.tfvars #-auto-approve
 
-# Section docker (DONE)
+# Docker & Docker Compose
     $ docker login
     $ docker pull cuongopswat/go-coffeeshop-barista:latest
     - Create repositories in dockerhub: khanhd6 account create repository go-coffeeshop-barista
@@ -42,16 +46,13 @@
         $ docker network prune
         $ sudo service docker restart
 
-# Section AWS services (DOING)
-EKS
+# Kubernetes Manifests
     - Create terraform modules for eks, rds
     - Store secrets in secretsmanager
-    $ aws secretsmanager create-secret \
-  --name prod-postgres-credentials \
-  --secret-string '{"POSTGRES_DB":<>,"POSTGRES_USER":<>,"POSTGRES_PASSWORD":<>}'
+    $ aws secretsmanager create-secret --name prod-postgres-credentials  --secret-string '{"POSTGRES_DB":<>,"POSTGRES_USER":<>,"POSTGRES_PASSWORD":<>}'
     - To store variables:
-        . Use terraform.tfvars to store var = value, e.g. vpc_cidr_block = "10.0.0.0/16"
-        . Set environment with prefix TF_VAR_, e.g.  TF_VAR_vpc_cidr_block=10.0.0.0/16
+        • Use terraform.tfvars to store var = value, e.g. vpc_cidr_block = "10.0.0.0/16"
+        • Set environment with prefix TF_VAR_, e.g.  TF_VAR_vpc_cidr_block=10.0.0.0/16
     - Configure kubectl for EKS
     $ aws eks update-kubeconfig --region ap-southeast-1 --name prod-eks
     $ kubectl get nodes
@@ -63,30 +64,32 @@ EKS
     $ kubectl apply -f hpa.yaml # for autoscaling
     $ kubectl apply -f ingress.yaml $ # get external IP for Ingress
 
-RDS
-    - Create Postgresql
-    - Retrieve db version
-    $ aws rds describe-db-engine-versions --engine postgres --query "DBEngineVersions[].EngineVersion"
+# AWS Integration
+    - EKS: For Kubernetes
+    - RDS:
+        • Create Postgresql
+        • Retrieve db version
+        $ aws rds describe-db-engine-versions --engine postgres --query "DBEngineVersions[].EngineVersion"
+    - Secret Manager:
+        • Store sensitive data
 
-Secret Manager
-    - Store sensitive data
-
-# Section CI/CD: AWS CodePipeline (TODO)
+# CI/CD & Security
+    AWS CodePipeline
     - Scan the image with Trivy software
     - Push to Docker private registry
     - Deploy using Helm
 
-# Section Monitoring System (TODO)
+# Monitoring
     - Amazon CloudWatch
     - Dashboard: monitor
-        . Nodes CPU and Memory
-        . Pods CPU and Memory
-        . API requests
-        . http requests 4xx, 5xx
+        • Nodes CPU and Memory
+        • Pods CPU and Memory
+        • API requests
+        • http requests 4xx, 5xx
     - Alert
-        . Autoscaling scales to the maximum number
-        . An anomaly change in ELB's RequestCount
-        . High Memory or CPU usage in any component of application,
-        . 5xx errors
+        • Autoscaling scales to the maximum number
+        • An anomaly change in ELB's RequestCount
+        • High Memory or CPU usage in any component of application,
+        • 5xx errors
 
 # Note
